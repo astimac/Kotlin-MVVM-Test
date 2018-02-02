@@ -1,0 +1,112 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+    dataBinding.enabled = true
+
+    defaultConfig {
+        applicationId "com.astimac.kotlin.mvvmexample"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix "-debug"
+            debuggable true
+        }
+        release {
+            debuggable false
+            zipAlignEnabled true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+
+    lintOptions {
+        lintConfig file('lint.xml')
+        textReport true
+        textOutput 'stdout'
+    }
+}
+
+dependencies {
+    // Kotlin
+    implementation depends.kotlin.stdlib
+
+    //==================== Support Library ====================
+    implementation depends.support.v4
+    implementation depends.support.appcompat
+    implementation depends.support.design
+    implementation depends.support.cardview
+    implementation depends.support.constraint
+
+    //==================== Network ====================
+    implementation depends.okhttp3.loggingIntercepter
+    implementation depends.gson
+    implementation depends.retrofit.core
+    implementation depends.retrofit.converterGson
+    implementation depends.retrofit.adapterRxJava2
+
+    //==================== Structure ====================
+
+    implementation depends.lifecycle.runtime
+    implementation depends.lifecycle.extensions
+    implementation depends.lifecycle.reactivestreams
+    implementation depends.room.runtime
+    implementation depends.room.rxjava2
+    kapt depends.room.compiler
+
+    implementation depends.rxjava2.core
+    implementation depends.rxjava2.android
+    implementation depends.rxjava2.kotlin
+
+    kapt depends.binding.compiler
+
+    implementation depends.dagger.core
+    implementation depends.dagger.android
+    implementation depends.dagger.androidSupport
+    kapt depends.dagger.compiler
+    kapt depends.dagger.androidProcessor
+
+    //==================== UI ====================
+    implementation depends.glide.core
+    implementation depends.glide.okhttp3
+    kapt depends.glide.compiler
+
+    implementation depends.downloadableCalligraphy
+
+    //==================== Debug ====================
+    implementation depends.timber
+    debugImplementation depends.leakcanary
+
+    //==================== Test ====================
+    testImplementation depends.junit
+    testImplementation depends.mockitoKotlin
+    testImplementation depends.assertk
+    androidTestImplementation depends.supporttest.runner
+    androidTestImplementation depends.supporttest.espresso
+    androidTestImplementation depends.supporttest.contrib
+    androidTestImplementation depends.assertk
+}
